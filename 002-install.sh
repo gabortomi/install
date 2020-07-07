@@ -38,7 +38,7 @@ echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 arch_chroot "locale-gen"
 export LANG=hu_HU.UTF-8
 
-echo "KEYMAP=\"hu\""  > /mnt/etc/vconsole.conf
+echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
 # Hostname
 arch_chroot "echo archbook > /etc/hostname"
