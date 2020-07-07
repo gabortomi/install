@@ -47,7 +47,8 @@ arch_chroot "echo archbook > /etc/hostname"
 echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.1.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm alsa-utils pulseaudio pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch xf86-video-fbdev"
+arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm alsa-utils pulseaudio pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch xf86-video-fbdev bash-completion"
+arch_chroot "systemctl enable NetworkManager"
 
 # Mkinitcpio
 arch_chroot "mkinitcpio -p linux"
@@ -59,13 +60,23 @@ arch_chroot "passwd"
 pacstrap /mnt refind-efi efibootmgr
 arch_chroot "refind-install"
 
-
 # Add a user
 arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
+echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
 arch_chroot "passwd $user_name"
 
 # Yay
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
+
+# Multilib repo
+echo "" >> /mnt/etc/pacman.conf;echo "[multilib]" >> /mnt/etc/pacman.conf;echo "Include = /etc/pacman.d/mirrorlist" >> /mnt/etc/pacman.conf
+arch_chroot "pacman -Syy"
+
+# Install VGA
+pacstrap /mnt xf86-video-intel libva-intel-driver lib32-mesa
+
+
+
 
 
 
