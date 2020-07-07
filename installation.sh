@@ -24,3 +24,7 @@ chmod 600 /mnt/swapfile
 mkswap /mnt/swapfile
 swapon /mnt/swapfile
 swapfile="yes"
+
+# Select the mirrors
+pacman -S --needed --noconfirm reflector
+reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
