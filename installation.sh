@@ -26,5 +26,9 @@ swapon /mnt/swapfile
 swapfile="yes"
 
 # Select the mirrors
-pacman -S --needed --noconfirm reflector
-reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
+pacman -Sy --needed --noconfirm reflector
+reflector --verbose -l 50 -p https --sort rate --save /etc/pacman.d/mirrorlist
+
+# INstall the BASE and BASE-DEVEL packages
+pacstrap /mnt base base-devel linux linux-firmware git
+
