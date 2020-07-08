@@ -68,9 +68,6 @@ arch_chroot "passwd $user_name"
 # Yay
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
 
-# Multilib repo
-echo "" >> /mnt/etc/pacman.conf;echo "[multilib]" >> /mnt/etc/pacman.conf;echo "Include = /etc/pacman.d/mirrorlist" >> /mnt/etc/pacman.conf
-arch_chroot "pacman -Syy"
 
 # Install VGA
 pacstrap /mnt xf86-video-intel libva-intel-driver lib32-mesa
