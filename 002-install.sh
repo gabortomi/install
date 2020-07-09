@@ -39,7 +39,7 @@ echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 arch_chroot "locale-gen"
 arch_chroot "export LANG=hu_HU.UTF-8"
-arch_chroot "locale locale > /etc/locale.conf"
+arch_chroot "locale > /etc/locale.conf"
 
 echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
@@ -80,7 +80,7 @@ arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install desktop
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
-arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift intel-ucode"
+arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift intel-ucode ttf-jetbrains-mono ttf-font-awesome"
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
