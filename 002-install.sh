@@ -85,7 +85,7 @@ then
 fi
 
 # Install VGA
-arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
+arch_chroot "pacman -S xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install desktop
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
