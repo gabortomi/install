@@ -74,6 +74,15 @@ arch_chroot "passwd $user_name"
 # Yay
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
 
+processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
+
+if [ "$processor" = "8086" ]
+then
+    pacstrap /mnt intel-ucode
+elif [ "$processor" = "1022" ]
+then
+    pacstrap /mnt amd-ucode
+fi
 
 # Install VGA
 arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
@@ -84,6 +93,9 @@ arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
+git clone https://github.com/magyarchlinux/magyarch_xfce4.git 
+mkdir -p /mnt/usr/share/backgrounds
+cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
 
 
 
