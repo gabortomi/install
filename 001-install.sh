@@ -17,6 +17,7 @@ mkfs.ext4 /dev/sda2
 
 # Mount the filesystem
 mount /dev/sda2 /mnt
+mkdir -p /mnt/boot/efi
 mount /dev/sda1 /mnt/boot/efi
 touch /mnt/swapfile
 
