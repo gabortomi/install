@@ -17,6 +17,7 @@ mkfs.ext4 /dev/sda2
 
 # Mount the filesystem
 mount /dev/sda2 /mnt
+mount /dev/sda1 /mnt/boot/efi
 touch /mnt/swapfile
 
 dd if=/dev/zero of=/mnt/swapfile bs=1M count=4096
