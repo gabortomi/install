@@ -93,6 +93,8 @@ arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
+cd ..
+
 git clone https://github.com/magyarchlinux/magyarch_xfce4.git 
 mkdir -p /mnt/usr/share/backgrounds
 cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
