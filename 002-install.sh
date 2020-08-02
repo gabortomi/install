@@ -57,19 +57,23 @@ arch_chroot "systemctl enable NetworkManager"
 arch_chroot "mkinitcpio -p linux"
 
 # Root passwd
-arch_chroot "passwd"
+#arch_chroot "passwd"
 
 # Boot loader
-pacstrap /mnt refind-efi efibootmgr
-arch_chroot "refind-install"
-echo "\"ArchBook Linux\" \"root=UUID=${rootuuid} rw add_efi_memmap\"" > /mnt/boot/refind_linux.conf
-echo "\"ArchBook Linux Fallback\" \"root=UUID=${rootuuid} rw add_efi_memmap initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
-echo "\"ArchBook Linux Terminal\" \"root=UUID=${rootuuid} rw add_efi_memmap systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
+#pacstrap /mnt refind-efi efibootmgr
+#arch_chroot "refind-install"
+#echo "\"ArchBook Linux\" \"root=UUID=${rootuuid} rw add_efi_memmap\"" > /mnt/boot/refind_linux.conf
+#echo "\"ArchBook Linux Fallback\" \"root=UUID=${rootuuid} rw add_efi_memmap initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
+#echo "\"ArchBook Linux Terminal\" \"root=UUID=${rootuuid} rw add_efi_memmap systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
+
+pacstrap /mnt grub efibootmgr
+arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
+arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
 # Add a user
 arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
 echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
-arch_chroot "passwd $user_name"
+#arch_chroot "passwd $user_name"
 
 # Yay
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
