@@ -93,7 +93,7 @@ pacstrap /mnt xf86-video-intel libva-intel-driver lib32-mesa
 
 # Install desktop
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
-arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm-gtk3 zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift intel-ucode ttf-jetbrains-mono ttf-font-awesome discord rofi cronie polkit-gnome feh unclutter python-gobject reflector"
+arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm-gtk3 zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift intel-ucode ttf-jetbrains-mono ttf-font-awesome discord rofi cronie polkit-gnome feh unclutter python-gobject reflector noto-fonts-emoji"
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
@@ -103,6 +103,7 @@ git clone https://github.com/magyarchlinux/magyarch_xfce4.git
 mkdir -p /mnt/usr/share/backgrounds
 cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
 
-git clone https://github.com/gabortomi/Mouse-and-Keyboardlayout.git
-cp -rf Mouse-and-Keyboardlayout/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
+git clone https://github.com/gabortomi/important-docs.git
+cp -rf important-docs/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
+cp -rf important-docs/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
