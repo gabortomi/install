@@ -55,7 +55,7 @@ rootuuid=$(lsblk -lno UUID /dev/sda2)
 
 # Copy files from Github
 arch_chroot "mkdir -p /mnt/mnt/etc/skel"
-arch_chroot "git clone https://github.com/gabortomi/tom-bspwm.git /mnt/mnt/etc/skel/"
+arch_chroot "git clone https://github.com/gabortomi/tom-spectrwm.git /mnt/mnt/etc/skel/"
 arch_chroot "cp -rfT /mnt/mnt/etc/skel/ /etc/skel/"
 
 # Fstab
@@ -125,7 +125,7 @@ then
 fi
 
 # Install VGA
-pacstrap /mnt xf86-video-intel libva-intel-driver lib32-mesa
+arch_chroot "pacman -S --noconfirm --needed xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install desktop
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
