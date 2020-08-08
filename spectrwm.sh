@@ -74,8 +74,8 @@ arch_chroot "hwclock --systohc --utc"
 echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 arch_chroot "locale-gen"
-arch_chroot "export LANG=hu_HU.UTF-8"
-arch_chroot "locale > /etc/locale.conf"
+export LANG=hu_HU.UTF-8
+locale > /mnt/etc/locale.conf
 
 echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
@@ -86,7 +86,7 @@ arch_chroot "echo archbook > /etc/hostname"
 # echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.1.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm alsa-utils xorg-xbacklight pulseaudio pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch xf86-video-fbdev bash-completion"
+arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm alsa-utils xorg-xbacklight pulseaudio pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch xf86-video-fbdev bash-completion acpi neofetch"
 arch_chroot "systemctl enable NetworkManager"
 
 # Mkinitcpio
@@ -129,7 +129,8 @@ arch_chroot "pacman -S --noconfirm --needed xf86-video-intel libva-intel-driver 
 
 # Install desktop
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
-arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift ttf-jetbrains-mono discord rofi polkit-gnome feh unclutter reflector noto-fonts-emoji dmenu"
+arch_chroot "pacman -S --noconfirm --needed  spectrwm unclutter firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift ttf-jetbrains-mono discord rofi polkit-gnome feh reflector noto-fonts-emoji dmenu lxappearance ttf-joypixels terminus-font xwallpaper"
+arch_chroot "git clone https://github.com/bazeeel/st.git /mnt/mnt/st; cd /mnt/mnt/st; make clean install"
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
@@ -138,6 +139,9 @@ cd ..
 git clone https://github.com/magyarchlinux/magyarch_xfce4.git 
 mkdir -p /mnt/usr/share/backgrounds
 cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
+cp -rf magyarch_xfce4/usr/share/icons/braincolor-green /mnt/usr/share/icons/
+cp -rf magyarch_xfce4/usr/share/themes/MagyArch-dark /mnt/usr/share/themes/
+cp -rf magyarch_xfce4/usr/share/themes/MagyArch-braincolor /mnt/usr/share/themes/
 
 git clone https://github.com/gabortomi/important-docs.git
 cp -rf important-docs/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
