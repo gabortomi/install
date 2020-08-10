@@ -83,13 +83,18 @@ echo "KEYMAP=us"  > /mnt/etc/vconsole.conf
 arch_chroot "echo archbook > /etc/hostname"
 
 # Hosts
-# echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.1.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
+# echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm xorg-xbacklight  xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch xf86-video-fbdev bash-completion"
+arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-appres xorg-xinit networkmanager network-manager-applet xdg-user-dirs gvfs gvfs-mtp man-db neofetch xf86-video-fbdev bash-completion"
 arch_chroot "pacman -S --noconfirm --needed pulseaudio pulseaudio-alsa alsa-utils alsa-plugins alsa-firmware alsa-lib "
 arch_chroot "pacman -S --noconfirm --needed unace unrar zip unzip sharutils uudeview arj cabextract file-roller"
 arch_chroot "systemctl enable NetworkManager"
+
+arch_chroot "pacman -S --noconfirm --needed lightdm lightdm-gtk-gretter lightdm-gtk-gretter-settings"
+arch_chroot "systemctl enable lightdm.service -f"
+arch_chroot "systemctl set-default graphical.target"
+
 
 # Mkinitcpio
 arch_chroot "mkinitcpio -p linux"
@@ -130,17 +135,16 @@ fi
 pacstrap /mnt xf86-video-intel libva-intel-driver lib32-mesa
 
 # Install desktop
-arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
-arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm-gtk3 zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift intel-ucode ttf-jetbrains-mono ttf-font-awesome discord rofi cronie polkit-gnome feh unclutter python-gobject reflector noto-fonts-emoji"
+arch_chroot "pacman -S --noconfirm --needed  xfce4 xfce4-goodies firefox firefox-i18n-hu picom neovim redshift discord polkit-gnome reflector noto-fonts-emoji"
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
 cd ..
 
-git clone https://github.com/magyarchlinux/magyarch_xfce4.git 
-mkdir -p /mnt/usr/share/backgrounds
-cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
+#git clone https://github.com/magyarchlinux/magyarch_xfce4.git 
+#mkdir -p /mnt/usr/share/backgrounds
+#cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
 
-git clone https://github.com/gabortomi/important-docs.git
-cp -rf important-docs/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
-cp -rf important-docs/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
+#git clone https://github.com/gabortomi/important-docs.git
+#cp -rf important-docs/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
+#cp -rf important-docs/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
