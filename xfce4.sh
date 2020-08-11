@@ -21,7 +21,7 @@ mkdir -p /mnt/boot/efi
 mount /dev/sda1 /mnt/boot/efi
 touch /mnt/swapfile
 
-dd if=/dev/zero of=/mnt/swapfile bs=1M count=4096
+dd if=/dev/zero of=/mnt/swapfile bs=1M count=2048
 chmod 600 /mnt/swapfile
 mkswap /mnt/swapfile
 swapon /mnt/swapfile
@@ -74,10 +74,10 @@ arch_chroot "hwclock --systohc --utc"
 echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 arch_chroot "locale-gen"
-arch_chroot "export LANG=hu_HU.UTF-8"
-arch_chroot "locale > /etc/locale.conf"
+export LANG=hu_HU.UTF-8
+locale > /mnt/etc/locale.conf
 
-echo "KEYMAP=us"  > /mnt/etc/vconsole.conf
+e#cho "KEYMAP=us"  > /mnt/etc/vconsole.conf
 
 # Hostname
 arch_chroot "echo archbook > /etc/hostname"
@@ -91,7 +91,7 @@ arch_chroot "pacman -S --noconfirm --needed pulseaudio pulseaudio-alsa alsa-util
 arch_chroot "pacman -S --noconfirm --needed unace unrar zip unzip sharutils uudeview arj cabextract file-roller"
 arch_chroot "systemctl enable NetworkManager"
 
-arch_chroot "pacman -S --noconfirm --needed lightdm lightdm-gtk-gretter lightdm-gtk-gretter-settings"
+arch_chroot "pacman -S --noconfirm --needed lightdm lightdm-gtk-greeter-settings lightdm-gtk-greeter"
 arch_chroot "systemctl enable lightdm.service -f"
 arch_chroot "systemctl set-default graphical.target"
 
