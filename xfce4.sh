@@ -131,11 +131,15 @@ then
     pacstrap /mnt amd-ucode
 fi
 
-# Install VGA
+# Install Intel VGA
 pacstrap /mnt xf86-video-intel libva-intel-driver lib32-mesa
 
+# Install AMD VGA
+pacstrap /mnt xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver
+
+
 # Install desktop
-arch_chroot "pacman -S --noconfirm --needed  xfce4 xfce4-goodies firefox firefox-i18n-hu picom neovim redshift discord polkit-gnome reflector noto-fonts-emoji"
+arch_chroot "pacman -S --noconfirm --needed  xfce4 xfce4-goodies picom redshift discord polkit-gnome reflector noto-fonts-emoji"
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
@@ -145,6 +149,6 @@ cd ..
 #mkdir -p /mnt/usr/share/backgrounds
 #cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
 
-#git clone https://github.com/gabortomi/important-docs.git
+git clone https://github.com/gabortomi/important-docs.git
 #cp -rf important-docs/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
-#cp -rf important-docs/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
+cp -rf important-docs/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
