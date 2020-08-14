@@ -106,7 +106,11 @@ pacstrap /mnt grub efibootmgr
 arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
 arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
+echo
+echo
 echo "Bootloader installed"
+echo
+echo
 
 # Add a user
 arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
@@ -123,7 +127,7 @@ git clone https://github.com/gabortomi/important-docs.git
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://github.com/gabortomi/important-docs.git'  ; cd important-docs ; su ${user_name} -c ; pacman -U yay-10* --noconfirm ; cd .. ; rm -rf important-docs"
 
 
-arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
+#arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
 
 processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
 
