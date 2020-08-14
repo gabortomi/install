@@ -32,9 +32,13 @@ pacman -Sy --needed --noconfirm reflector
 reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 
 # INstall the BASE and BASE-DEVEL packages
-pacstrap /mnt base base-devel linux linux-firmware
+pacstrap /mnt base base-devel linux linux-firmware git
 
+echo
+echo
 echo "Base install done"
+echo
+echo
 
 #!/bin/bash
 
@@ -71,11 +75,15 @@ echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 arch_chroot "locale-gen"
 export LANG=hu_HU.UTF-8
-locale > /mnt/etc/locale.conf"
+locale > /mnt/etc/locale.conf
 
 echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
+echo
+echo
 echo "locale done"
+echo
+echo
 
 # Hostname
 arch_chroot "echo archbook > /etc/hostname"
@@ -104,9 +112,17 @@ echo "Bootloader installed"
 arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
 echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
 
+echo
+echo 
 echo "User added"
+echo
+echo
 
 # Yay
+git clone https://github.com/gabortomi/important-docs.git
+arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://github.com/gabortomi/important-docs.git'  ; cd important-docs ; su ${user_name} -c ; pacman -U yay-10* --noconfirm ; cd .. ; rm -rf important-docs"
+
+
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
 
 processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
@@ -123,8 +139,8 @@ fi
 arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install desktop
-#arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
-arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm-gtk3 zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift intel-ucode ttf-jetbrains-mono ttf-font-awesome discord rofi cronie polkit-gnome feh unclutter python-gobject reflector noto-fonts-emoji"
+arch_chroot "cd /home/${user_name} ; su ${user_name} -c ; yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2 "
+arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm-gtk3 zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift ttf-jetbrains-mono ttf-font-awesome discord rofi cronie polkit-gnome feh unclutter python-gobject reflector noto-fonts-emoji"
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
@@ -135,7 +151,6 @@ mkdir -p /mnt/usr/share/backgrounds
 cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
 
 git clone https://github.com/gabortomi/important-docs.git
-cp -rf important-docs/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
 cp -rf important-docs/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
-
+cp -rf important-docs/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
 
