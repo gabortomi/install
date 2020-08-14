@@ -123,8 +123,8 @@ echo
 echo
 
 # Yay
-git clone https://github.com/gabortomi/important-docs.git
-arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://github.com/gabortomi/important-docs.git'  ; cd important-docs ; su ${user_name} -c ; pacman -U yay-10* --noconfirm ; cd .. ; rm -rf important-docs"
+git clone https://github.com/gabortomi/useful-docs.git
+arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://github.com/gabortomi/useful-docs.git'  ; cd useful-docs ; su ${user_name} -c ; pacman -U yay-10* dmenu2* polybar* sutils-git* xtitle-git* --noconfirm ; cd .. ; rm -rf important-docs"
 
 
 #arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
