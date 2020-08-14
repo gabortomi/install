@@ -21,7 +21,7 @@ mkdir -p /mnt/boot/efi
 mount /dev/sda1 /mnt/boot/efi
 touch /mnt/swapfile
 
-dd if=/dev/zero of=/mnt/swapfile bs=1M count=4096
+dd if=/dev/zero of=/mnt/swapfile bs=1M count=2048
 chmod 600 /mnt/swapfile
 mkswap /mnt/swapfile
 swapon /mnt/swapfile
@@ -74,8 +74,8 @@ arch_chroot "hwclock --systohc --utc"
 echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 arch_chroot "locale-gen"
-arch_chroot "export LANG=hu_HU.UTF-8"
-arch_chroot "locale > /etc/locale.conf"
+export LANG=hu_HU.UTF-8
+locale > /mnt/etc/locale.conf"
 
 echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
@@ -125,10 +125,10 @@ then
 fi
 
 # Install VGA
-pacstrap /mnt xf86-video-intel libva-intel-driver lib32-mesa
+arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install desktop
-arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
+#arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2'"
 arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd firefox firefox-i18n-hu alacritty picom dunst neovim pcmanfm-gtk3 zathura zathura-pdf-poppler zathura-ps zathura-djvu redshift intel-ucode ttf-jetbrains-mono ttf-font-awesome discord rofi cronie polkit-gnome feh unclutter python-gobject reflector noto-fonts-emoji"
 arch_chroot "rm -rf /mnt/mnt"
 arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
