@@ -34,6 +34,8 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 # INstall the BASE and BASE-DEVEL packages
 pacstrap /mnt base base-devel linux linux-firmware
 
+echo "Base install done"
+
 #!/bin/bash
 
 #set -e
@@ -73,6 +75,8 @@ locale > /mnt/etc/locale.conf"
 
 echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
+echo "locale done"
+
 # Hostname
 arch_chroot "echo archbook > /etc/hostname"
 
@@ -80,7 +84,7 @@ arch_chroot "echo archbook > /etc/hostname"
 # echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.1.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm alsa-utils xorg-xbacklight pulseaudio pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch xf86-video-fbdev bash-completion"
+arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-appres xorg-xinit xorg-twm alsa-utils xorg-xbacklight pulseaudio pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch xf86-video-fbdev bash-completion"
 arch_chroot "systemctl enable NetworkManager"
 
 # Mkinitcpio
@@ -94,9 +98,13 @@ pacstrap /mnt grub efibootmgr
 arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
 arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
+echo "Bootloader installed"
+
 # Add a user
 arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
 echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
+
+echo "User added"
 
 # Yay
 arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
