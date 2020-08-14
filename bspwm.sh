@@ -38,12 +38,6 @@ pacstrap /mnt base base-devel linux linux-firmware
 
 #set -e
 
-###############################################################################
-
-# Author	:	Tamas Gabor
-
-###############################################################################
-
 # Command
 arch_chroot() {
     arch-chroot /mnt /bin/bash -c "${1}"
