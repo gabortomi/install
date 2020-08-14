@@ -9,6 +9,8 @@ arch_chroot() {
 
 user_name=tamas
 
+alias GETTEXT='gettext'
+
 URSET001=$(GETTEXT "User name")
 URSET002=$(GETTEXT "User password")
 URSET003=$(GETTEXT "Repeat user password")
