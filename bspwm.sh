@@ -154,7 +154,7 @@ git clone https://github.com/magyarchlinux/magyarch_xfce4.git
 mkdir -p /mnt/usr/share/backgrounds
 cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
 
-git clone https://github.com/gabortomi/important-docs.git
+git clone https://github.com/gabortomi/useful-docs.git
 cp -rf important-docs/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 cp -rf important-docs/30-touchpad.conf /mnt/etc/X11/xorg.conf.d/
 
