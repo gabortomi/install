@@ -9,6 +9,13 @@ arch_chroot() {
 
 user_name=tamas
 
+URSET001=$(GETTEXT "User name")
+URSET002=$(GETTEXT "User password")
+URSET003=$(GETTEXT "Repeat user password")
+URSET004=$(GETTEXT "Root password")
+URSET005=$(GETTEXT "Repeat root password")
+
+
 # Check password
 pass_check() {
 
