@@ -9,13 +9,29 @@ arch_chroot() {
 
 user_name=tamas
 
-echo "RUN PASS CHECK FUNCTION"
+# Check password
+pass_check() {
+
+    echo "RUN PASS CHECK FUNCTION"
 
     user_name=$1
     userpass1=$2
     userpass2=$3
     rootpass1=$4
     rootpass2=$5
+    
+    if [ "$userpass1" != "$userpass2" ]
+    then
+        yad --image=error --title="$TITLE"  --buttons-layout=center --text="$ERR_USER_PASS"
+        echo "Not same user password"
+        user_root_set
+    elif [ "$rootpass1" != "$rootpass2" ]
+    then
+        yad --image=error --title="$TITLE" --buttons-layout=center --text="$ERR_ROOT_PASS"
+        echo "Not same root password"
+        user_root_set
+    fi
+}
     
     
 echo "# $INS002"
