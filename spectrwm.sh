@@ -168,7 +168,7 @@ arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
         echo "No Laptop"
     else
         echo "Laptop"
-        cp /installer/40-libinput.conf /mnt/etc/X11/xorg.conf.d/
+        cp -rf install/40-libinput.conf /mnt/etc/X11/xorg.conf.d/
     fi
 
 # Mkinitcpio
