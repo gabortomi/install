@@ -108,10 +108,10 @@ then
 fi
 
 # Install Intel VGA
-    pacstrap /mnt xf86-video-intel libva-intel-driver lib32-mesa
+    #arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install AMD VGA
-    pacstrap /mnt xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver
+    arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
 
 # Install desktop
     arch_chroot "pacman -S --noconfirm --needed  xfce4 xfce4-goodies picom redshift discord polkit-gnome reflector noto-fonts-emoji"
