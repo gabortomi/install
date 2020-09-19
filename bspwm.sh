@@ -117,6 +117,32 @@ fi
 # Set makepkg.conf
     sed -i 's/#MAKEFLAGS="-j[0-9]"/MAKEFLAGS="-j'$(nproc)'"/;s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T '$(nproc)' -z -)/;s/COMPRESSZST=(zstd -c -z -q -)/COMPRESSZST=(zstd -c -T'$(nproc)' -z -q -)/' /mnt/etc/makepkg.conf
 
+# Boot loader
+
+pacstrap /mnt grub efibootmgr
+
+arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
+
+arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
+
+
+
+# Check Laptop
+
+    if [ -z "$(ls -A /sys/class/power_supply/)" -o "$(ls -A /sys/class/power_supply)" = "AC" ]
+
+    then
+
+        echo "No Laptop"
+
+    else
+
+        echo "Laptop"
+
+        cp -rf install/40-libinput.conf /mnt/etc/X11/xorg.conf.d/
+
+    fi
+    
 git clone https://github.com/magyarchlinux/magyarch_xfce4.git 
 mkdir -p /mnt/usr/share/backgrounds
 cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
