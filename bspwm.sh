@@ -71,7 +71,7 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     export LANG=hu_HU.UTF-8
     locale > /mnt/etc/locale.conf
 
-e#cho "KEYMAP=us"  > /mnt/etc/vconsole.conf
+echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
 # Time Zone
     arch_chroot "ln -s /usr/share/zoneinfo/Europe/Budapest /etc/localtime"
@@ -79,7 +79,7 @@ e#cho "KEYMAP=us"  > /mnt/etc/vconsole.conf
     arch_chroot "timedatectl set-ntp true"
 
 # Hostname
-    arch_chroot "echo archlinux > /etc/hostname"
+    arch_chroot "echo archbook > /etc/hostname"
 
 # Hosts
 # echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
