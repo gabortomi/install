@@ -45,9 +45,9 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     echo "end base"
 
 # Copy files from Github
-#arch_chroot "mkdir -p /mnt/mnt/etc/skel"
-#arch_chroot "git clone https://github.com/gabortomi/tom-bspwm.git /mnt/mnt/etc/skel/"
-#arch_chroot "cp -rfT /mnt/mnt/etc/skel/ /etc/skel/"
+    arch_chroot "mkdir -p /mnt/mnt/etc/skel"
+    arch_chroot "git clone https://github.com/gabortomi/tom-bspwm.git /mnt/mnt/etc/skel/"
+    arch_chroot "cp -rfT /mnt/mnt/etc/skel/ /etc/skel/"
 
 # Fstab
     genfstab -p /mnt >> /mnt/etc/fstab
