@@ -30,7 +30,7 @@ mkdir -p /mnt/boot/efi
 mount /dev/sda1 /mnt/boot/efi
 touch /mnt/swapfile
 
-dd if=/dev/zero of=/mnt/swapfile bs=1M count=2048
+dd if=/dev/zero of=/mnt/swapfile bs=1M count=4096
 chmod 600 /mnt/swapfile
 mkswap /mnt/swapfile
 swapon /mnt/swapfile
@@ -87,12 +87,11 @@ e#cho "KEYMAP=us"  > /mnt/etc/vconsole.conf
 # Install basic apps (Xorg, Pulseaudio, ...)
     arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-appres xorg-xinit networkmanager network-manager-applet xdg-user-dirs gvfs gvfs-mtp man-db neofetch xf86-video-fbdev bash-completion"
     arch_chroot "pacman -S --noconfirm --needed pulseaudio pulseaudio-alsa alsa-utils alsa-plugins alsa-firmware alsa-lib "
-    arch_chroot "pacman -S --noconfirm --needed unace unrar zip unzip sharutils uudeview arj cabextract file-roller"
+    arch_chroot "pacman -S --noconfirm --needed unace unrar zip unzip sharutils uudeview arj cabextract file-roller discord reflector noto-fonts-emoji"
     arch_chroot "systemctl enable NetworkManager"
 
-    arch_chroot "pacman -S --noconfirm --needed lightdm lightdm-gtk-greeter-settings lightdm-gtk-greeter"
-    arch_chroot "systemctl enable lightdm.service -f"
-    arch_chroot "systemctl set-default graphical.target"
+    arch_chroot "pacman -S --noconfirm --needed sddm"
+    arch_chroot "systemctl enable sddm.service"
 
 # Yay
     arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
@@ -108,13 +107,13 @@ then
 fi
 
 # Install Intel VGA
-    #arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
+    arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install AMD VGA
-    arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
+    #arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
 
 # Install desktop
-    arch_chroot "pacman -S --noconfirm --needed  xfce4 xfce4-goodies picom redshift discord polkit-gnome reflector noto-fonts-emoji"
+    arch_chroot "pacman -S --noconfirm --needed  plasma kde-applications"
     arch_chroot "rm -rf /mnt/mnt"
     arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
