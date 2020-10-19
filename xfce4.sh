@@ -71,7 +71,7 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     export LANG=hu_HU.UTF-8
     locale > /mnt/etc/locale.conf
 
-e#cho "KEYMAP=us"  > /mnt/etc/vconsole.conf
+#echo "KEYMAP=us"  > /mnt/etc/vconsole.conf
 
 # Time Zone
     arch_chroot "ln -s /usr/share/zoneinfo/Europe/Budapest /etc/localtime"
@@ -111,7 +111,7 @@ fi
     #arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install AMD VGA
-    arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
+    arch_chroot "pacman -S --noconfirm --needed xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
 
 # Install desktop
     arch_chroot "pacman -S --noconfirm --needed  xfce4 xfce4-goodies picom redshift discord polkit-gnome reflector noto-fonts-emoji"
