@@ -15,8 +15,6 @@ arch_chroot() {
 
 user_name=tamas
 
-rootuuid=$(lsblk -lno UUID /dev/sda2)
-
 # UPDATE THE SYSTEM CLOCK
 timedatectl set-ntp true
 
@@ -113,7 +111,7 @@ fi
     #arch_chroot "pacman -S --noconfirm --needed xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
 
 # Install desktop
-    arch_chroot "pacman -S --noconfirm --needed plasma-meta"
+    arch_chroot "pacman -S --noconfirm --needed dwm st libx11 libxinerama libxft freetype2 dmenu"
 
 # Set makepkg.conf
     sed -i 's/#MAKEFLAGS="-j[0-9]"/MAKEFLAGS="-j'$(nproc)'"/;s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T '$(nproc)' -z -)/;s/COMPRESSZST=(zstd -c -z -q -)/COMPRESSZST=(zstd -c -T'$(nproc)' -z -q -)/' /mnt/etc/makepkg.conf
@@ -122,6 +120,7 @@ fi
     pacstrap /mnt refind-efi efibootmgr
     # arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
     arch_chroot "refind-install"
+    rootuuid=$(lsblk -lno UUID /dev/sda2)
     echo "\"MagyArch Linux\" \"root=UUID=${rootuuid} rw \"" > /mnt/boot/refind_linux.conf
     echo "\"MagyArch Linux Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
     echo "\"MagyArch Linux Terminal\" \"root=UUID=${rootuuid} rw systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
