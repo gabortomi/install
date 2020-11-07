@@ -121,7 +121,6 @@ fi
 # Boot loader
     pacstrap /mnt refind-efi efibootmgr
     # arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
-    rootuuid=$(lsblk -lno UUID ${root_part})
     arch_chroot "refind-install"
     echo "\"MagyArch Linux\" \"root=UUID=${rootuuid} rw \"" > /mnt/boot/refind_linux.conf
     echo "\"MagyArch Linux Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
