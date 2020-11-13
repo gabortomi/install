@@ -103,15 +103,15 @@ then
 fi
 
 # Install Intel VGA
-    arch_chroot "xf86-video-intel libva-intel-driver lib32-mesa"
+    arch_chroot "pacman -S --noconfirm --needed xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install AMD VGA
     #arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
 
 # Install desktop
     #arch_chroot "cd /home/${user_name} ; su ${user_name} -c ; yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2 "
-    arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo firefox firefox-i18n-hu alacritty picom dunst pcmanfm-gtk3 polkit-gnome"
-    arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono firefox firefox-i18n-hu alacritty dunst neovim xorg-xsetroot lxappearance-gtk3 vifm discord ttf-dejavu unclutter unrar unzip rofi xorg-xbacklight polybar"
+    arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo firefox firefox-i18n-hu alacritty picom dunst pcmanfm-gtk3 polkit-gnome ttf-dejavu"
+    arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono firefox firefox-i18n-hu alacritty dunst neovim xorg-xsetroot lxappearance-gtk3 vifm discord unclutter unrar unzip rofi xorg-xbacklight polybar"
     #arch_chroot "pacman -S --noconfirm --needed     sutils-git xtitle-git  unrar unzip urlscan w3m xcape xclip xdotool xorg-xdpyinfo youtube-dl zathura zathura-pdf-poppler zathura-ps zathura-djvu mediainfo atool fzf highlight rofi xorg-xbacklight bc task-spooler polybar docx2txt odt2txt urxvt-perls rxvt-unicode pcmanfm"    
     arch_chroot "su ${user_name} -c 'yay -S sutiks-git xtitle-git'"    
     arch_chroot "su ${user_name} -c 'mkdir -p /home/$user_name/.config/{bspwm,sxhkd}'"
@@ -125,11 +125,16 @@ fi
 
 # Boot loader
 
-pacstrap /mnt grub efibootmgr
+    #pacstrap /mnt grub efibootmgr
+    #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
+    #arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
-arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
-
-arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
+    pacstrap /mnt refind-efi efibootmgr
+    arch_chroot "refind-install"
+    rootuuid=$(lsblk -lno UUID /dev/sda2)
+    echo "\"Archbook\" \"root=UUID=$(rootuuid) rw \"" > /mnt/boot/refin_linux.conf
+    echo "\"Archbook Fallback\" \"root=UUID=$(rootuuid) rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refin_linux.conf
+    echo "\"Archbook Terminal\" \"root=UUID=$(rootuuid) rw systemd.unit=multi-user.target\"" >> /mnt/boot/refin_linux.conf
 
 
 
@@ -149,9 +154,6 @@ arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
     fi
     
-git clone https://github.com/magyarchlinux/magyarch_xfce4.git 
-mkdir -p /mnt/usr/share/backgrounds
-cp -rf magyarch_xfce4/usr/share/backgrounds/magyarch/ /mnt/usr/share/backgrounds/
 
 cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
