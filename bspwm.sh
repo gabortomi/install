@@ -116,12 +116,12 @@ fi
     arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo firefox firefox-i18n-hu alacritty picom dunst pcmanfm-gtk3 polkit-gnome ttf-dejavu"
     arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono firefox firefox-i18n-hu alacritty dunst neovim xorg-xsetroot lxappearance-gtk3 vifm discord unclutter unrar unzip rofi xorg-xbacklight polybar"
     #arch_chroot "pacman -S --noconfirm --needed     sutils-git xtitle-git  unrar unzip urlscan w3m xcape xclip xdotool xorg-xdpyinfo youtube-dl zathura zathura-pdf-poppler zathura-ps zathura-djvu mediainfo atool fzf highlight rofi xorg-xbacklight bc task-spooler polybar docx2txt odt2txt urxvt-perls rxvt-unicode pcmanfm"    
-    arch_chroot "su ${user_name} -c 'yay -S sutils-git xtitle-git dmenu2'"    
-    arch_chroot "su ${user_name} -c 'mkdir -p /home/$user_name/.config/{bspwm,sxhkd}'"
-    arch_chroot "su ${user_name} -c 'cp /usr/share/doc/bspwm/examples/bspwmrc /home/$user_name/.config/bspwm/'"
-    arch_chroot "su ${user_name} -c 'cp /usr/share/doc/bspwm/examples/sxhkdrc /home/$user_name/.config/sxhkd/'"
-    #arch_chroot "rm -rf /mnt/mnt"
-    #arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
+    arch_chroot "su ${user_name} -c 'yay -S --noconfirm sutils-git xtitle-git dmenu2 polybar'"    
+    #arch_chroot "su ${user_name} -c 'mkdir -p /home/$user_name/.config/{bspwm,sxhkd}'"
+    #arch_chroot "su ${user_name} -c 'cp /usr/share/doc/bspwm/examples/bspwmrc /home/$user_name/.config/bspwm/'"
+    #arch_chroot "su ${user_name} -c 'cp /usr/share/doc/bspwm/examples/sxhkdrc /home/$user_name/.config/sxhkd/'"
+    arch_chroot "rm -rf /mnt/mnt"
+    arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
 # Set makepkg.conf
     sed -i 's/#MAKEFLAGS="-j[0-9]"/MAKEFLAGS="-j'$(nproc)'"/;s/COMPRESSXZ=(xz -c -z -)/COMPRESSXZ=(xz -c -T '$(nproc)' -z -)/;s/COMPRESSZST=(zstd -c -z -q -)/COMPRESSZST=(zstd -c -T'$(nproc)' -z -q -)/' /mnt/etc/makepkg.conf
