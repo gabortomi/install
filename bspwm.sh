@@ -71,7 +71,10 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     export LANG=hu_HU.UTF-8
     locale > /mnt/etc/locale.conf
 
-echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
+
+    mkdir -p /mnt/etc/X11/xorg.conf.d/
+    echo -e 'Section "InputClass"\n\tIdentifier "system-keyboard"\n\tMatchIsKeyboard "on"\n\tOption "XkbLayout" "hu"\n\tOption "XkbModel" "pc105"\n\tOption "XkbVariant" ",''"\n\tOption "XkbOptions" "grp:alt_shift_toggle"\nEndSection' > /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+    echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
 # Time Zone
     arch_chroot "ln -s /usr/share/zoneinfo/Europe/Budapest /etc/localtime"
