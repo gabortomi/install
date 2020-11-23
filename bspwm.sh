@@ -45,9 +45,9 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     echo "end base"
 
 # Copy files from Github
-    #arch_chroot "mkdir -p /mnt/mnt/etc/skel"
-    #arch_chroot "git clone https://github.com/gabortomi/tom-bspwm.git /mnt/mnt/etc/skel/"
-    #arch_chroot "cp -rfT /mnt/mnt/etc/skel/ /etc/skel/"
+    arch_chroot "mkdir -p /mnt/mnt/etc/skel"
+    arch_chroot "git clone https://github.com/gabortomi/tom-bspwm.git /mnt/mnt/etc/skel/"
+    arch_chroot "cp -rfT /mnt/mnt/etc/skel/ /etc/skel/"
 
 # Fstab
     genfstab -p /mnt >> /mnt/etc/fstab
@@ -113,7 +113,7 @@ fi
     arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo firefox firefox-i18n-hu alacritty picom dunst pcmanfm-gtk3 polkit-gnome ttf-dejavu"
     arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono firefox firefox-i18n-hu alacritty dunst neovim xorg-xsetroot lxappearance-gtk3 vifm discord unclutter unrar unzip rofi xorg-xbacklight polybar"
     #arch_chroot "pacman -S --noconfirm --needed     sutils-git xtitle-git  unrar unzip urlscan w3m xcape xclip xdotool xorg-xdpyinfo youtube-dl zathura zathura-pdf-poppler zathura-ps zathura-djvu mediainfo atool fzf highlight rofi xorg-xbacklight bc task-spooler polybar docx2txt odt2txt urxvt-perls rxvt-unicode pcmanfm"    
-    arch_chroot "su ${user_name} -c 'yay -S sutiks-git xtitle-git dmenu2'"    
+    arch_chroot "su ${user_name} -c 'yay -S sutils-git xtitle-git dmenu2'"    
     arch_chroot "su ${user_name} -c 'mkdir -p /home/$user_name/.config/{bspwm,sxhkd}'"
     arch_chroot "su ${user_name} -c 'cp /usr/share/doc/bspwm/examples/bspwmrc /home/$user_name/.config/bspwm/'"
     arch_chroot "su ${user_name} -c 'cp /usr/share/doc/bspwm/examples/sxhkdrc /home/$user_name/.config/sxhkd/'"
