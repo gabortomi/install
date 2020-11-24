@@ -135,9 +135,9 @@ fi
     pacstrap /mnt refind-efi efibootmgr
     arch_chroot "refind-install"
     rootuuid=$(lsblk -lno UUID /dev/sda2)
-    echo "\"Archbook\" \"root=UUID=${rootuuid} rw \"" > /mnt/boot/refin_linux.conf
-    echo "\"Archbook Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refin_linux.conf
-    echo "\"Archbook Terminal\" \"root=UUID=${rootuuid} rw systemd.unit=multi-user.target\"" >> /mnt/boot/refin_linux.conf
+    echo "\"Archbook\" \"root=UUID=${rootuuid} rw \"" > /mnt/boot/refind_linux.conf
+    echo "\"Archbook Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
+    echo "\"Archbook Terminal\" \"root=UUID=${rootuuid} rw systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
 
 
 
