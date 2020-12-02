@@ -113,7 +113,7 @@ fi
 
 # Install desktop
     #arch_chroot "cd /home/${user_name} ; su ${user_name} -c ; yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2 "
-    arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo firefox firefox-i18n-hu alacritty picom dunst pcmanfm-gtk3 polkit-gnome ttf-dejavu"
+    arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo firefox firefox-i18n-hu alacritty picom dunst pcmanfm-gtk3 polkit-gnome ttf-dejavu rofi"
     arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono firefox firefox-i18n-hu alacritty dunst neovim xorg-xsetroot lxappearance-gtk3 vifm discord unclutter unrar unzip rofi xorg-xbacklight polybar"
     #arch_chroot "pacman -S --noconfirm --needed     sutils-git xtitle-git  unrar unzip urlscan w3m xcape xclip xdotool xorg-xdpyinfo youtube-dl zathura zathura-pdf-poppler zathura-ps zathura-djvu mediainfo atool fzf highlight rofi xorg-xbacklight bc task-spooler polybar docx2txt odt2txt urxvt-perls rxvt-unicode pcmanfm"    
     arch_chroot "su ${user_name} -c 'yay -S --noconfirm sutils-git xtitle-git dmenu2 polybar'"    
