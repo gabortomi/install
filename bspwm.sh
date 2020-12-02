@@ -88,7 +88,9 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 # echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-    arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm xterm alsa-utils xorg-xbacklight pulseaudio pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch acpi xf86-video-fbdev bash-completion"
+    arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm xterm alsa-utils xorg-xbacklight pulseaudio /
+    pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils gvfs gvfs-mtp man-db neofetch acpi xf86-video-fbdev bash-completion"
+    
     #arch_chroot "pacman -S --noconfirm --needed unace unrar zip unzip sharutils uudeview arj cabextract file-roller"
     arch_chroot "systemctl enable NetworkManager"
 
@@ -114,12 +116,13 @@ fi
 # Install desktop
     #arch_chroot "cd /home/${user_name} ; su ${user_name} -c ; yay -S --noconfirm --needed  xtitle-git sutils-git polybar dmenu2 "
     arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo firefox firefox-i18n-hu alacritty picom dunst pcmanfm-gtk3 polkit-gnome ttf-dejavu rofi"
-    arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono firefox firefox-i18n-hu alacritty dunst neovim xorg-xsetroot lxappearance-gtk3 vifm discord unclutter unrar unzip rofi xorg-xbacklight polybar"
+    arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono firefox firefox-i18n-hu alacritty dunst neovim xorg-xsetroot lxappearance-gtk3 /
+    vifm discord unclutter unrar unzip rofi xorg-xbacklight polybarttf-bitstream-vera ttf-dejavu ttf-font-awesome-4 ttf-jetbrains-mono ttf-joypixels /
+    ttf-linux-libertine unclutter"
+    
     #arch_chroot "pacman -S --noconfirm --needed     sutils-git xtitle-git  unrar unzip urlscan w3m xcape xclip xdotool xorg-xdpyinfo youtube-dl zathura zathura-pdf-poppler zathura-ps zathura-djvu mediainfo atool fzf highlight rofi xorg-xbacklight bc task-spooler polybar docx2txt odt2txt urxvt-perls rxvt-unicode pcmanfm"    
-    arch_chroot "su ${user_name} -c 'yay -S sutils-git xtitle-git dmenu2 polybar'"    
-    #arch_chroot "su ${user_name} -c 'mkdir -p /home/$user_name/.config/{bspwm,sxhkd}'"
-    #arch_chroot "su ${user_name} -c 'cp /usr/share/doc/bspwm/examples/bspwmrc /home/$user_name/.config/bspwm/'"
-    #arch_chroot "su ${user_name} -c 'cp /usr/share/doc/bspwm/examples/sxhkdrc /home/$user_name/.config/sxhkd/'"
+    
+    arch_chroot "su ${user_name} -c 'yay -S --noconfirm sutils-git xtitle-git dmenu2 polybar'"    
     arch_chroot "rm -rf /mnt/mnt"
     arch_chroot "cd /home/$user_name/; rm -rf .git/ LICENSE README.md git.sh setup-git.sh "
 
