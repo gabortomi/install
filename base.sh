@@ -80,6 +80,11 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 # Hosts
 # echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
 
+# Install basic apps (Xorg, Pulseaudio, ...)
+    arch_chroot "pacman -S --noconfirm --needed networkmanager"
+    
+    arch_chroot "systemctl enable NetworkManager"
+
     processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
 
 if [ "$processor" = "8086" ]
