@@ -138,7 +138,7 @@ fi
 
 cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
-# Mkinitcpio
-    arch_chroot "mkinitcpio -p linux"
+arch_chroot "curl -LO https://github.com/gabortomi/LARBS/larbs.sh && larbs.sh"
+
 
 umount -R /mnt
