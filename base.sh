@@ -87,9 +87,10 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist-a
     echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	laptop.localdomain	laptop" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-    arch_chroot "pacman -S --noconfirm --needed networkmanager"
+    arch_chroot "pacman -S --noconfirm --needed networkmanager networkmanager-runit neovim"
     
-    arch_chroot "systemctl enable NetworkManager"
+    #arch_chroot "systemctl enable NetworkManager"
+    arch_chroot " ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/current "
 
     processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
 
@@ -113,7 +114,7 @@ fi
 # Boot loader
 
     basestrap /mnt grub efibootmgr
-    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
+    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi" --bootloader-id=GRUB
     arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
     #pacstrap /mnt refind-efi efibootmgr
