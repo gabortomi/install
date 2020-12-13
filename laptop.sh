@@ -59,9 +59,9 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist-a
     arch_chroot "passwd root"
 
 # Add a user
-    #arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
-    #echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
-    #arch_chroot "passwd $user_name"
+    arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
+    echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
+    arch_chroot "passwd $user_name"
 
 # Locale
     echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
@@ -114,7 +114,7 @@ fi
 # Boot loader
 
     basestrap /mnt grub efibootmgr
-    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi" --bootloader-id=GRUB
+    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB"
     arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
     #pacstrap /mnt refind-efi efibootmgr
@@ -143,9 +143,9 @@ fi
     fi
     
 
-cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
+#cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
-arch_chroot "curl -LO github.com/gabortomi/LARBS/blob/master/larbs.sh && sh larbs.sh"
+arch_chroot "curl -LO larbs.xyz/larbs.sh && sh larbs.sh"
 
 
 umount -R /mnt
