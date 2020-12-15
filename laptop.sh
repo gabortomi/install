@@ -116,7 +116,7 @@ fi
 # Boot loader
 
     basestrap /mnt grub efibootmgr
-    artix_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB"
+    artix_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB"
     artix_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
     #pacstrap /mnt refind-efi efibootmgr
