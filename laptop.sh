@@ -10,9 +10,11 @@
 
 # Command
 arch_chroot() {
-    artools-chroot /mnt /bin/bash -c "${1}"
+    arch-chroot /mnt /bin/bash -c "${1}"
 }
-
+artix_chroot() {
+    artools-chroot /mnt "${1}"
+}
 user_name=tamas
 
 # UPDATE THE SYSTEM CLOCK
@@ -54,14 +56,14 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist-a
     echo "" >> /mnt/etc/pacman.conf;echo "[multilib]" >> /mnt/etc/pacman.conf;echo "Include = /etc/pacman.d/mirrorlist-arch" >> /mnt/etc/pacman.conf
     echo "" >> /mnt/etc/pacman.conf;echo "[magyarch_repo]" >> /mnt/etc/pacman.conf;echo "SigLevel = Optional TrustedOnly" >> /mnt/etc/pacman.conf;echo 'Server = https://magyarchlinux.github.io/$repo/$arch' >> /mnt/etc/pacman.conf
     
-    arch_chroot "pacman -Syy"
+    artix_chroot "pacman -Syy"
 
-    arch_chroot "passwd root"
+    artix_chroot "passwd root"
 
 # Add a user
     arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
     echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
-    arch_chroot "passwd $user_name"
+    artix_chroot "passwd $user_name"
 
 # Locale
     echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
@@ -76,21 +78,21 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist-a
     echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
 # Time Zone
-    arch_chroot "ln -s /usr/share/zoneinfo/Europe/Budapest /etc/localtime"
-    arch_chroot "hwclock --systohc"
-    arch_chroot "timedatectl set-ntp true"
+    artix_chroot "ln -s /usr/share/zoneinfo/Europe/Budapest /etc/localtime"
+    artix_chroot "hwclock --systohc"
+    artix_chroot "timedatectl set-ntp true"
 
 # Hostname
-    arch_chroot "echo laptop > /etc/hostname"
+    artix_chroot "echo laptop > /etc/hostname"
 
 # Hosts
     echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	laptop.localdomain	laptop" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-    arch_chroot "pacman -S --noconfirm --needed networkmanager networkmanager-runit neovim"
+    artix_chroot "pacman -S --noconfirm --needed networkmanager networkmanager-runit neovim"
     
     #arch_chroot "systemctl enable NetworkManager"
-    arch_chroot " ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/current "
+    artix_chroot " ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/current "
 
     processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
 
@@ -103,7 +105,7 @@ then
 fi
 
 # Install Intel VGA
-    arch_chroot "pacman -S --noconfirm --needed xf86-video-intel intel-media-driver lib32-mesa"
+    artix_chroot "pacman -S --noconfirm --needed xf86-video-intel intel-media-driver lib32-mesa"
 
 # Install AMD VGA
     #arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
@@ -114,8 +116,8 @@ fi
 # Boot loader
 
     basestrap /mnt grub efibootmgr
-    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB"
-    arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
+    artix_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB"
+    artix_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
     #pacstrap /mnt refind-efi efibootmgr
     #arch_chroot "refind-install"
@@ -145,7 +147,7 @@ fi
 
 #cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
-arch_chroot "curl -LO larbs.xyz/larbs.sh && sh larbs.sh"
+#arch_chroot "curl -LO larbs.xyz/larbs.sh && sh larbs.sh"
 
 
 umount -R /mnt
