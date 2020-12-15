@@ -61,7 +61,7 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist-a
     artix_chroot "passwd root"
 
 # Add a user
-    arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
+    artix_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
     echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
     artix_chroot "passwd $user_name"
 
