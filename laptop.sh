@@ -12,9 +12,7 @@
 arch_chroot() {
     arch-chroot /mnt /bin/bash -c "${1}"
 }
-artix_chroot() {
-    artools-chroot /mnt "${1}"
-}
+
 user_name=tamas
 
 # UPDATE THE SYSTEM CLOCK
@@ -41,29 +39,27 @@ swapfile="yes"
 
 # Select the mirrors
 pacman -Sy --needed --noconfirm reflector
-reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist-arch
+reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 
 # Install the BASE and BASE-DEVEL packages
-    #pacstrap /mnt base base-devel linux linux-firmware
-    basestrap /mnt base base-devel runit elogind-runit linux linux-firmware
+    pacstrap /mnt base base-devel linux linux-firmware
     echo "end base"
 
 # Fstab
-    #genfstab -p /mnt >> /mnt/etc/fstab
-    fstabgen -U /mnt >> /mnt/etc/fstab
+    genfstab -p /mnt >> /mnt/etc/fstab
         
-    cp /etc/pacman.d/mirrorlist-arch /mnt/etc/pacman.d/mirrorlist-arch
-    echo "" >> /mnt/etc/pacman.conf;echo "[multilib]" >> /mnt/etc/pacman.conf;echo "Include = /etc/pacman.d/mirrorlist-arch" >> /mnt/etc/pacman.conf
-    echo "" >> /mnt/etc/pacman.conf;echo "[magyarch_repo]" >> /mnt/etc/pacman.conf;echo "SigLevel = Optional TrustedOnly" >> /mnt/etc/pacman.conf;echo 'Server = https://magyarchlinux.github.io/$repo/$arch' >> /mnt/etc/pacman.conf
+    cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+    echo "" >> /mnt/etc/pacman.conf;echo "[multilib]" >> /mnt/etc/pacman.conf;echo "Include = /etc/pacman.d/mirrorlist" >> /mnt/etc/pacman.conf
+    #echo "" >> /mnt/etc/pacman.conf;echo "[magyarch_repo]" >> /mnt/etc/pacman.conf;echo "SigLevel = Optional TrustedOnly" >> /mnt/etc/pacman.conf;echo 'Server = https://magyarchlinux.github.io/$repo/$arch' >> /mnt/etc/pacman.conf
     
-    artix_chroot "pacman -Syy"
+    arch_chroot "pacman -Syy"
 
-    artix_chroot "passwd root"
+    arch_chroot "passwd root"
 
 # Add a user
-    artix_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
+    arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
     echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
-    artix_chroot "passwd $user_name"
+    arch_chroot "passwd $user_name"
 
 # Locale
     echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
@@ -78,34 +74,33 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist-a
     echo "KEYMAP=hu"  > /mnt/etc/vconsole.conf
 
 # Time Zone
-    artix_chroot "ln -s /usr/share/zoneinfo/Europe/Budapest /etc/localtime"
-    artix_chroot "hwclock --systohc"
-    artix_chroot "timedatectl set-ntp true"
+    arch_chroot "ln -s /usr/share/zoneinfo/Europe/Budapest /etc/localtime"
+    arch_chroot "hwclock --systohc"
+    arch_chroot "timedatectl set-ntp true"
 
 # Hostname
-    artix_chroot "echo laptop > /etc/hostname"
+    arch_chroot "echo laptop > /etc/hostname"
 
 # Hosts
     echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	laptop.localdomain	laptop" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-    artix_chroot "pacman -S --noconfirm --needed networkmanager networkmanager-runit neovim"
+    arch_chroot "pacman -S --noconfirm --needed networkmanager networkmanager-runit neovim"
     
-    #arch_chroot "systemctl enable NetworkManager"
-    artix_chroot " ln -s /etc/runit/sv/NetworkManager /etc/runit/runsvdir/current "
+    arch_chroot "systemctl enable NetworkManager"
 
     processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
 
 if [ "$processor" = "8086" ]
 then
-    basestrap /mnt intel-ucode
+    pacstrap /mnt intel-ucode
 elif [ "$processor" = "1022" ]
 then
-    basestrap /mnt amd-ucode
+    pacstrap /mnt amd-ucode
 fi
 
 # Install Intel VGA
-    artix_chroot "pacman -S --noconfirm --needed xf86-video-intel intel-media-driver lib32-mesa"
+    arch_chroot "pacman -S --noconfirm --needed xf86-video-intel intel-media-driver lib32-mesa"
 
 # Install AMD VGA
     #arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
@@ -115,9 +110,9 @@ fi
 
 # Boot loader
 
-    basestrap /mnt grub efibootmgr
-    artix_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB"
-    artix_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
+    pacstrap /mnt grub efibootmgr
+    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB"
+    arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
     #pacstrap /mnt refind-efi efibootmgr
     #arch_chroot "refind-install"
