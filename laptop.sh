@@ -42,7 +42,7 @@ pacman -Sy --needed --noconfirm reflector
 reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 
 # Install the BASE and BASE-DEVEL packages
-    pacstrap /mnt base base-devel linux linux-firmware
+    pacstrap /mnt base base-devel linux linux-firmware git nano
     echo "end base"
 
 # Fstab
@@ -85,7 +85,7 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	laptop.localdomain	laptop" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-    arch_chroot "pacman -S --noconfirm --needed networkmanager networkmanager-runit neovim"
+    arch_chroot "pacman -S --noconfirm --needed networkmanager neovim"
     
     arch_chroot "systemctl enable NetworkManager"
 
@@ -100,7 +100,7 @@ then
 fi
 
 # Install Intel VGA
-    arch_chroot "pacman -S --noconfirm --needed xf86-video-intel intel-media-driver lib32-mesa"
+    arch_chroot "pacman -S --noconfirm --needed xf86-video-intel libva-intel-driver intel-media-driver lib32-mesa"
 
 # Install AMD VGA
     #arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
@@ -140,7 +140,7 @@ fi
     fi
     
 
-#cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
+cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
 #arch_chroot "curl -LO larbs.xyz/larbs.sh && sh larbs.sh"
 
