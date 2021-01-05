@@ -85,7 +85,8 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	laptop.localdomain	laptop" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-    arch_chroot "pacman -S --noconfirm --needed networkmanager neovim"
+    arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-xinit xterm xorg-xbacklight pulseaudio pulseaudio-alsa \
+    pulsemixer pamixer xf86-input-libinput  gvfs gvfs-mtp man-db acpi xf86-video-fbdev nm-connection-editor networkmanager"
     
     arch_chroot "systemctl enable NetworkManager"
 
@@ -100,7 +101,7 @@ then
 fi
 
 # Install Intel VGA
-    arch_chroot "pacman -S --noconfirm --needed xf86-video-intel libva-intel-driver intel-media-driver lib32-mesa"
+    arch_chroot "pacman -S --noconfirm --needed xf86-video-intel libva-intel-driver lib32-mesa"
 
 # Install AMD VGA
     #arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
