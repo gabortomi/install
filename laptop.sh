@@ -92,6 +92,12 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 
     processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
 
+# Yay
+    arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
+
+# Autoupdate
+    arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://github.com/magyarchlinux/magyarch-scriptek.git' ; cd magyarch-scriptek/autoupdate && ./install"
+
 if [ "$processor" = "8086" ]
 then
     pacstrap /mnt intel-ucode
