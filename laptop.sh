@@ -117,9 +117,9 @@ fi
 
 # Boot loader
 
-    pacstrap /mnt grub efibootmgr
-    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB"
-    arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
+    #pacstrap /mnt grub efibootmgr
+    #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=GRUB"
+    #arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
     #pacstrap /mnt refind-efi efibootmgr
     #arch_chroot "refind-install"
