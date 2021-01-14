@@ -129,7 +129,7 @@ fi
     #echo "\"Archbook Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
     #echo "\"Archbook Terminal\" \"root=UUID=${rootuuid} rw systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
 
-    echo "${rootuuid}" >> /boot/loader/enries/arch.sh
+    echo "${rootuuid}" >> /mnt/boot/loader/enries/arch.sh
 
 # Check Laptop
 
