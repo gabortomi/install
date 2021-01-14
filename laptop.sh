@@ -19,7 +19,7 @@ user_name=tamas
 timedatectl set-ntp true
 
 # Format the partition
-mkfs.fat -F32 /dev/sda1
+#mkfs.fat -F32 /dev/sda1
 mkfs.ext4 /dev/sda2
 mkfs.ext4 /dev/sda3
 
@@ -149,7 +149,7 @@ fi
 
 cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
-#arch_chroot "curl -LO larbs.xyz/larbs.sh && sh larbs.sh"
+arch_chroot "curl -LO https://raw.githubusercontent.com/gabortomi/LARBS/master/larbs.sh && sh larbs.sh"
 
 
 umount -R /mnt
