@@ -57,9 +57,9 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     arch_chroot "passwd root"
 
 # Add a user
-    arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
-    echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
-    arch_chroot "passwd $user_name"
+    #arch_chroot "useradd -m -g users -G adm,lp,wheel,power,audio,video -s /bin/bash $user_name"
+    #echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
+    #arch_chroot "passwd $user_name"
 
 # Locale
     echo "hu_HU.UTF-8 UTF-8" >> /mnt/etc/locale.gen
@@ -93,10 +93,11 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
 
 # Yay
-    arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
+    #arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
 
 # Autoupdate
     arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://github.com/magyarchlinux/magyarch-scriptek.git' ; cd magyarch-scriptek/autoupdate && ./install"
+    arch_chroot "rm -rf /home/tamas/magyarch-scriptek"
 
 if [ "$processor" = "8086" ]
 then
@@ -123,12 +124,12 @@ fi
 
     #pacstrap /mnt refind-efi efibootmgr
     #arch_chroot "refind-install"
-    #rootuuid=$(lsblk -lno UUID /dev/sda2)
+    rootuuid=$(lsblk -lno UUID /dev/sda2)
     #echo "\"Archbook\" \"root=UUID=${rootuuid} rw \"" > /mnt/boot/refind_linux.conf
     #echo "\"Archbook Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
     #echo "\"Archbook Terminal\" \"root=UUID=${rootuuid} rw systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
 
-
+    echo "${rootuuid}" >> /boot/loader/enries/arch.sh
 
 # Check Laptop
 
@@ -149,7 +150,7 @@ fi
 
 cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
-arch_chroot "curl -LO https://raw.githubusercontent.com/gabortomi/LARBS/master/larbs.sh && sh larbs.sh"
+arch_chroot "curl -LO https://raw.githubusercontent.com/gabortomi/LARBS/master/larbs.sh"
 
 
-umount -R /mnt
+#umount -R /mnt
