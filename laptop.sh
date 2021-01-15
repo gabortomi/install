@@ -129,7 +129,7 @@ fi
     #echo "\"Archbook Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
     #echo "\"Archbook Terminal\" \"root=UUID=${rootuuid} rw systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
 
-    echo "${rootuuid}" >> /mnt/boot/loader/entries/arch.sh
+    echo "${rootuuid}" >> /mnt/boot/loader/entries/arch.conf
 
 # Check Laptop
 
@@ -152,5 +152,9 @@ cp -rf install/75-noto-color-emoji.conf /mnt/etc/fonts/conf.avail/
 
 arch_chroot "curl -LO https://raw.githubusercontent.com/gabortomi/LARBS/master/larbs.sh"
 
+# Update root UUID
+    sed '/option/d' /mnt/boot/loader/entries/arch.conf
+    sed 'initramfs/a options root=$(lsblk -lno UUID /dev/sda2) rw' /mnt/boot/loader/entries/arch.conf
+    sed 'initramfs/a options root=$(rootuuid) rw' /mnt/boot/loader/entries/arch.conf
 
 umount -R /mnt
