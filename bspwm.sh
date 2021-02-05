@@ -46,16 +46,21 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 
 # Copy files from Github
     arch_chroot "mkdir -p /mnt/mnt/etc/skel"
-    arch_chroot "git clone https://github.com/gabortomi/tom-bspwm.git /mnt/mnt/etc/skel/"
+    arch_chroot "git clone https://github.com/gabortomi/bspwm.git /mnt/mnt/etc/skel/"
     arch_chroot "cp -rfT /mnt/mnt/etc/skel/ /etc/skel/"
 
 # Fstab
     genfstab -p /mnt >> /mnt/etc/fstab
 
     cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+
+# Make pacman and yay colorful and adds eye candy on the progress bar because why not.
     echo "" >> /mnt/etc/pacman.conf;echo "[multilib]" >> /mnt/etc/pacman.conf;echo "Include = /etc/pacman.d/mirrorlist" >> /mnt/etc/pacman.conf
-        echo "" >> /mnt/etc/pacman.conf;echo "[magyarch_repo]" >> /mnt/etc/pacman.conf;echo "SigLevel = Optional TrustedOnly" >> /mnt/etc/pacman.conf;echo 'Server = https://magyarchlinux.github.io/$repo/$arch' >> /mnt/etc/pacman.conf
+    echo "" >> /mnt/etc/pacman.conf;echo "[magyarch_repo]" >> /mnt/etc/pacman.conf;echo "SigLevel = Optional TrustedOnly" >> /mnt/etc/pacman.conf;echo 'Server = https://magyarchlinux.github.io/$repo/$arch' >> /mnt/etc/pacman.conf
+    grep -q "^Color" /mnt/etc/pacman.conf || sed -i "s/^#Color$/Color/" /mnt/etc/pacman.conf
+    grep -q "ILoveCandy" /mnt/etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /mnt/etc/pacman.conf
     
+# Update packagelist    
     arch_chroot "pacman -Syy"
 
     arch_chroot "passwd root"
@@ -79,17 +84,17 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 
 # Time Zone
     arch_chroot "ln -s /usr/share/zoneinfo/Europe/Budapest /etc/localtime"
-    arch_chroot "hwclock --systohc --utc"
+    arch_chroot "hwclock --systohc"
     arch_chroot "timedatectl set-ntp true"
 
 # Hostname
-    arch_chroot "echo archbook > /etc/hostname"
+    arch_chroot "echo laptop > /etc/hostname"
 
 # Hosts
 # echo "127.0.0.1	localhost" >> /mnt/etc/hosts;echo "::1		localhost" >> /mnt/etc/hosts;echo "127.0.0.1	archbook.localdomain	archbook" >> /mnt/etc/hosts
 
 # Install basic apps (Xorg, Pulseaudio, ...)
-    arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm xterm alsa-utils \
+    arch_chroot "pacman -S --noconfirm --needed xorg-server xorg-apps xorg-xinit xorg-twm xterm \
     xorg-xbacklight pulseaudio pulseaudio-alsa xf86-input-libinput networkmanager xdg-user-dirs xdg-utils \
     gvfs gvfs-mtp man-db neofetch acpi xf86-video-fbdev bash-completion nm-connection-editor"
     
@@ -97,7 +102,12 @@ reflector --verbose -l 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
     arch_chroot "systemctl enable NetworkManager"
 
 # Yay
-    arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
+    #arch_chroot "cd /home/${user_name} ; su ${user_name} -c 'git clone https://aur.archlinux.org/yay-bin' ; cd yay-bin ; su ${user_name} -c 'makepkg' ; pacman -U yay-bin*x86_64* --noconfirm ; cd .. ; rm -rf yay-bin"
+
+# Paru AUR helper
+    arch_chroot "pacman -S paru-bin bat vifm tdrop-git --needed --noconfirm"
+    arch_chroot "sed -i 's/#BottomUp/BottomUp/' /etc/paru.conf"
+    arch_chroot "sed -i 's/#Color/Color/' /etc/pacman.conf"
 
     processor=$(lspci -n | awk -F " " '{print $2 $3}' | grep ^"06" | awk -F ":" '{print $2}' | sed -n  '1p')
 
@@ -116,12 +126,11 @@ fi
     #arch_chroot "xf86-video-amdgpu vulkan-radeon libva-mesa-driver lib32-mesa lib32-libva-mesa-driver"
 
 # Install desktop
-    arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo firefox firefox-i18n-hu alacritty picom dunst \
-    pcmanfm-gtk3 polkit-gnome ttf-dejavu rofi"
-    arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono firefox firefox-i18n-hu alacritty \
-    dunst neovim xorg-xsetroot lxappearance-gtk3 vifm discord unclutter unrar unzip rofi xorg-xbacklight \
-    polybar ttf-bitstream-vera ttf-dejavu ttf-font-awesome-4 ttf-jetbrains-mono ttf-joypixels unclutter \
-    ttf-linux-libertine "
+    arch_chroot "pacman -S --noconfirm --needed  bspwm sxhkd xdo alacritty picom dunst \
+    gnome-keyring polkit-gnome ttf-dejavu rofi"
+    arch_chroot "pacman -S --noconfirm --needed  picom ttf-jetbrains-mono vivaldi alacritty \
+    dunst neovim xorg-xsetroot vifm discord unclutter unrar unzip rofi xorg-xbacklight \
+    polybar ttf-font-awesome-4  ttf-joypixels unclutter "
     
     #arch_chroot "pacman -S --noconfirm --needed     sutils-git xtitle-git  unrar unzip urlscan w3m xcape xclip xdotool xorg-xdpyinfo youtube-dl zathura zathura-pdf-poppler zathura-ps zathura-djvu mediainfo atool fzf highlight rofi xorg-xbacklight bc task-spooler polybar docx2txt odt2txt urxvt-perls rxvt-unicode pcmanfm"    
     
@@ -133,16 +142,16 @@ fi
 
 # Boot loader
 
-    #pacstrap /mnt grub efibootmgr
-    #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
-    #arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
+    pacstrap /mnt grub efibootmgr
+    arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot/efi"
+    arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 
-    pacstrap /mnt refind-efi efibootmgr
-    arch_chroot "refind-install"
-    rootuuid=$(lsblk -lno UUID /dev/sda2)
-    echo "\"Archbook\" \"root=UUID=${rootuuid} rw \"" > /mnt/boot/refind_linux.conf
-    echo "\"Archbook Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
-    echo "\"Archbook Terminal\" \"root=UUID=${rootuuid} rw systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
+    #pacstrap /mnt refind-efi efibootmgr
+    #arch_chroot "refind-install"
+    #rootuuid=$(lsblk -lno UUID /dev/sda2)
+    #echo "\"Archbook\" \"root=UUID=${rootuuid} rw \"" > /mnt/boot/refind_linux.conf
+    #echo "\"Archbook Fallback\" \"root=UUID=${rootuuid} rw initrd=/initramfs-linux-fallback.img\"" >> /mnt/boot/refind_linux.conf
+    #echo "\"Archbook Terminal\" \"root=UUID=${rootuuid} rw systemd.unit=multi-user.target\"" >> /mnt/boot/refind_linux.conf
 
 
 
